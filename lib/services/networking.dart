@@ -6,12 +6,13 @@ import 'package:http/http.dart' as http;
 import '../apiKey.dart';
 
 class NetworkHelper {
-  Future<WeatherData> getWeatherData(Location location) async {
-    var lat = location.latitude;
-    var lon = location.longitude;
-    var data;
+  Future<WeatherData> getWeatherOfCurrentLocation() async {
+
+    Location location = new Location();
+    await location.getCurrentLocation();
+    print('got location ${location.latitude}');
     Uri uri = Uri.https('api.openweathermap.org', '/data/2.5/weather',
-        {'lat': '$lat', 'lon': '$lon', 'units': 'metric', 'appid': '$API_KEY'});
+        {'lat': '${location.latitude}', 'lon': '${location.longitude}', 'units': 'metric', 'appid': '$API_KEY'});
     return http.get(uri).then((response) {
       if (response.statusCode == 200) {
         return mapResponseToData(response);
@@ -30,7 +31,7 @@ class NetworkHelper {
     return new WeatherData(
       condition: condition,
       locationName: location,
-      temperature: temp,
+      temperature: temp.toInt(),
     );
   }
 }
@@ -38,7 +39,7 @@ class NetworkHelper {
 class WeatherData {
   String locationName;
   int condition;
-  double temperature;
+  int temperature;
 
   WeatherData({
     required this.locationName,

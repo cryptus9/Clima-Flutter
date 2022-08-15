@@ -13,17 +13,16 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
-    Location location = new Location();
-    location.getCurrentLocation().then((value) => {
-          getWeatherData(location),
-        });
+    getWeatherData();
   }
 
-  void getWeatherData(Location location) {
+  void getWeatherData() {
     NetworkHelper networkHelper = new NetworkHelper();
-    networkHelper.getWeatherData(location).then((value) {
+    networkHelper.getWeatherOfCurrentLocation().then((response) {
       Navigator.push(context, MaterialPageRoute(builder: (context) {
-        return LocationScreen();
+        return LocationScreen(
+          weatherData: response,
+        );
       }));
     });
   }
