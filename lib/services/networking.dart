@@ -10,14 +10,12 @@ class NetworkHelper {
 
     Location location = new Location();
     await location.getCurrentLocation();
-    print('got location ${location.latitude}');
     Uri uri = Uri.https('api.openweathermap.org', '/data/2.5/weather',
         {'lat': '${location.latitude}', 'lon': '${location.longitude}', 'units': 'metric', 'appid': '$API_KEY'});
     return http.get(uri).then((response) {
       if (response.statusCode == 200) {
         return mapResponseToData(response);
       } else {
-        print(response.statusCode);
         return new WeatherData(locationName: 'test', condition: 1, temperature: 1);
       }
     });

@@ -1,3 +1,4 @@
+import 'package:clima/screens/city_screen.dart';
 import 'package:clima/services/location.dart';
 import 'package:clima/services/networking.dart';
 import 'package:clima/services/weather.dart';
@@ -25,14 +26,12 @@ class _LocationScreenState extends State<LocationScreen> {
   }
 
   void updateUi(WeatherData weatherData) {
-    print('updating ui');
     setState(() {
       this.weatherData = weatherData;
       this.weatherIcon =
           WeatherModel().getWeatherIcon(widget.weatherData.condition);
       this.condition =
           WeatherModel().getMessage(widget.weatherData.temperature);
-      print(condition);
     });
   }
 
@@ -61,9 +60,7 @@ class _LocationScreenState extends State<LocationScreen> {
                     onPressed: () async {
                       NetworkHelper()
                           .getWeatherOfCurrentLocation()
-                          .then((response) => {
-                      updateUi(response)
-                      });
+                          .then((response) => {updateUi(response)});
                     },
                     child: Icon(
                       Icons.near_me,
@@ -71,7 +68,14 @@ class _LocationScreenState extends State<LocationScreen> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) {
+                          return CityScreen();
+                        }),
+                      );
+                    },
                     child: Icon(
                       Icons.location_city,
                       size: 50.0,
