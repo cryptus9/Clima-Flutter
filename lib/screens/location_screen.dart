@@ -58,7 +58,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 children: <Widget>[
                   TextButton(
                     onPressed: () async {
-                      NetworkHelper()
+                      WeatherModel()
                           .getWeatherOfCurrentLocation()
                           .then((response) => {updateUi(response)});
                     },
@@ -69,12 +69,14 @@ class _LocationScreenState extends State<LocationScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.push<WeatherData>(
                         context,
                         MaterialPageRoute(builder: (context) {
                           return CityScreen();
                         }),
-                      );
+                      ).then((value) {
+                        updateUi(value!);
+                      });
                     },
                     child: Icon(
                       Icons.location_city,
